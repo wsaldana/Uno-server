@@ -72,7 +72,7 @@ class Table:
         self.deck = Deck(deck)
         return self.deck
 
-    def suffle(self) -> None:
+    def shuffle(self) -> None:
         random.shuffle(self.deck)
 
     def generate_player_deck(self, name: str) -> Deck:
