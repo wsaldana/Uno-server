@@ -17,10 +17,14 @@ def run():
         print("Deck: ", table.player_decks[turn])
         color = input("Color: ")
         number = input("Number: ")
+        card = Card(color, number)
         try:
-            win = table.put_card(turn, Card(color, number))
+            win = table.put_card(turn, card)
             if win:
                 break
+            if card == Card("comodin", "+4"):
+                new_color = input("New color: ")
+                table.change_color(new_color)
             table.turn = table.next_player()
         except Exception as err:
             print(err)

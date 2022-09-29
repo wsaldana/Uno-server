@@ -116,14 +116,18 @@ class Table:
     def start_game(self) -> Card:
         self.top_card = self.deck.pop()
 
-    def put_card(self, player: str, card: Card) -> bool:
+    def change_color(self, color: str):
+        self.top_card.color = color
+
+    def put_card(self, player: str, card: Card, new_color: str = None) -> bool:
         self.turn = player
 
         if card not in self.player_decks[player]:
             raise InvalidCard()
 
         if self.top_card != card:
-            raise InvalidMove()
+            if card != Card("comodin", "+4"):
+                raise InvalidMove()
 
         # Comodines
         if card == Card("comodin", "+4"):
