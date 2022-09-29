@@ -11,8 +11,11 @@ class Card:
     def __eq__(self, other) -> bool:
         return (self.color == other.color) or (self.number == other.number)
 
-    def __repr__(self) -> str:
+    def __str__(self) -> str:
         return f'({self.color}, {self.number})'
+
+    def __repr__(self) -> str:
+        return str(self)
 
     def __dict__(self) -> dict:
         return {
@@ -39,6 +42,14 @@ class Deck:
 
     def __getitem__(self, i):
         return self.cards[i]
+
+    def __str__(self) -> str:
+        return str([
+            str(card) for card in self.cards
+        ])
+
+    def __repr__(self) -> str:
+        return str(self)
 
 
 baraja = [
