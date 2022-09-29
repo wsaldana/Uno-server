@@ -34,6 +34,12 @@ class Deck:
     def pop(self):
         return self.cards.pop()
 
+    def __setitem__(self, i, data):
+        self.cards[i] = data
+
+    def __getitem__(self, i):
+        return self.cards[i]
+
 
 baraja = [
     ('Rojo', '3'), ('Verde', '7'), ('Azul', '9'), ('Azul', '7'),
