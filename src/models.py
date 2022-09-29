@@ -2,6 +2,8 @@ from typing import List
 from typing import Dict
 import random
 
+from src.exceptions import InvalidCard, InvalidMove
+
 
 class Card:
     def __init__(self, color: str, number: str):
@@ -50,6 +52,15 @@ class Deck:
 
     def __repr__(self) -> str:
         return str(self)
+
+    def index(self, card: Card):
+        return self.cards.index(card)
+
+    def __delitem__(self, key: index):
+        del self.cards[key]
+
+    def append(self, card: Card) -> None:
+        self.cards.append(card)
 
 
 baraja = [
@@ -109,21 +120,21 @@ class Table:
         self.turn = player
 
         if card not in self.player_decks[player]:
-            raise Exception(message="Card is not in player deck")
+            raise InvalidCard()
 
         if self.top_card != card:
-            raise Exception(message="Move not allowed")
+            raise InvalidMove()
 
         index = self.player_decks[player].index(card)
         del self.player_decks[player][index]
         self.deck.append(self.top_card)
-        self.suffle()
+        self.shuffle()
         self.top_card = card
 
         return len(self.player_decks[player]) == 1
 
     def next_player(self) -> str:
-        players = self.player_decks.keys()
+        players = list(self.player_decks.keys())
         current_index = players.index(self.turn)
 
         if current_index == len(players) - 1 and self.direction > 0:
