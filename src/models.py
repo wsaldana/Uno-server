@@ -64,21 +64,21 @@ class Deck:
 
 
 baraja = [
-    ('Rojo', '3'), ('Verde', '7'), ('Azul', '9'), ('Azul', '7'),
-    ('Verde', '1'), ('Verde', '4'), ('Rojo', '5'), ('Rojo', '6'),
-    ('Azul', '5'), ('Azul', '6'), ('Amarillo', '7'), ('Azul', '1'),
-    ('Rojo', '1'), ('Verde', '6'), ('Amarillo', '3'), ('Amarillo', '0'),
-    ('Verde', '2'), ('Verde', '3'), ('Verde', '9'), ('Rojo', '8'),
-    ('Azul', '4'), ('Azul', '3'), ('Amarillo', '1'), ('Amarillo', '8'),
-    ('Verde', '0'), ('Comodin', '+4'), ('Verde', '8'), ('Amarillo', '9'),
-    ('Azul', '8'), ('Amarillo', '2'), ('Amarillo', '4'), ('Rojo', '9'),
-    ('Rojo', '4'), ('Verde', '5'), ('Azul', '2'), ('Amarillo', '6'),
-    ('Comodin', '+4'), ('Rojo', '0'), ('Amarillo', '5'), ('Azul', '0'),
-    ('Rojo', '2'), ('Rojo', '7'), ('Amarillo', '+2'), ('Amarillo', '+2'),
-    ('Amarillo', '+2'), ('Amarillo', '+2'), ('Verde', '+2'), ('Comodin', '+4'),
-    ('Verde', '+2'), ('Verde', '+2'), ('Verde', '+2'), ('Comodin', '+4'),
-    ('Azul', '+2'), ('Azul', '+2'), ('Azul', '+2'), ('Azul', '+2'),
-    ('Rojo', '+2'), ('Rojo', '+2'), ('Rojo', '+2'), ('Rojo', '+2')
+    ('rojo', '3'), ('verde', '7'), ('azul', '9'), ('azul', '7'),
+    ('verde', '1'), ('verde', '4'), ('rojo', '5'), ('rojo', '6'),
+    ('azul', '5'), ('azul', '6'), ('amarillo', '7'), ('azul', '1'),
+    ('rojo', '1'), ('verde', '6'), ('amarillo', '3'), ('amarillo', '0'),
+    ('verde', '2'), ('verde', '3'), ('verde', '9'), ('rojo', '8'),
+    ('azul', '4'), ('azul', '3'), ('amarillo', '1'), ('amarillo', '8'),
+    ('verde', '0'), ('comodin', '+4'), ('verde', '8'), ('amarillo', '9'),
+    ('azul', '8'), ('amarillo', '2'), ('amarillo', '4'), ('rojo', '9'),
+    ('rojo', '4'), ('verde', '5'), ('azul', '2'), ('amarillo', '6'),
+    ('comodin', '+4'), ('rojo', '0'), ('amarillo', '5'), ('azul', '0'),
+    ('rojo', '2'), ('rojo', '7'), ('amarillo', '+2'), ('amarillo', '+2'),
+    ('amarillo', '+2'), ('amarillo', '+2'), ('verde', '+2'), ('comodin', '+4'),
+    ('verde', '+2'), ('verde', '+2'), ('verde', '+2'), ('comodin', '+4'),
+    ('azul', '+2'), ('azul', '+2'), ('azul', '+2'), ('azul', '+2'),
+    ('rojo', '+2'), ('rojo', '+2'), ('rojo', '+2'), ('rojo', '+2')
 ]
 
 
@@ -124,6 +124,15 @@ class Table:
 
         if self.top_card != card:
             raise InvalidMove()
+
+        # Comodines
+        if card == Card("comodin", "+4"):
+            for _ in range(4):
+                self.player_decks[self.next_player()].append(self.deck.pop())
+
+        if card == Card("any", "+2"):
+            for _ in range(2):
+                self.player_decks[self.next_player()].append(self.deck.pop())
 
         index = self.player_decks[player].index(card)
         del self.player_decks[player][index]
