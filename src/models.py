@@ -1,8 +1,38 @@
+from typing import List
 from typing import Dict
 import random
 
-from uno_server.src.models.card import Card
-from uno_server.src.models.deck import Deck
+
+class Card:
+    def __init__(self, color: str, number: str):
+        self.color = color
+        self.number = number
+
+    def __eq__(self, other) -> bool:
+        return (self.color == other.color) or (self.number == other.number)
+
+    def __repr__(self) -> str:
+        return f'({self.color}, {self.number})'
+
+    def __dict__(self) -> dict:
+        return {
+            'color': self.color,
+            'number': self.number,
+        }
+
+
+class Deck:
+    def __init__(self, cards: List[Card] = []) -> None:
+        self.cards = cards
+
+    def __len__(self) -> int:
+        return len(self.cards)
+
+    def __iter__(self):
+        return iter(self.cards)
+
+    def pop(self):
+        return self.cards.pop()
 
 
 baraja = [

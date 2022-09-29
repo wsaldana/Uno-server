@@ -1,5 +1,5 @@
-from uno_server.src.models.table import Table
-from uno_server.src.models.card import Card
+# from uno_server.src.models.table import Table
+# from uno_server.src.models.card import Card
 
 
 def run():

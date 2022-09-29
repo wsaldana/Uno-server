@@ -1,0 +1,25 @@
+{
+    "_meta": {
+        "hash": {
+            "sha256": "558fd9bef9e83c3a814a91f8b9ed4aafb64988d1a086891229720d99a79ee4df"
+        },
+        "pipfile-spec": 6,
+        "requires": {
+            "python_version": "3.9"
+        },
+        "sources": [
+            {
+                "name": "pypi",
+                "url": "https://pypi.org/simple",
+                "verify_ssl": true
+            }
+        ]
+    },
+    "default": {
+        "uno-server": {
+            "editable": true,
+            "path": "."
+        }
+    },
+    "develop": {}
+}
