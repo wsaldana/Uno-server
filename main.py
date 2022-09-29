@@ -15,6 +15,13 @@ def run():
         print("\n", turn)
         print("Top: ", table.top_card)
         print("Deck: ", table.player_decks[turn])
+        op = "y"
+        while op == "y":
+            op = input("Steal a card? (y/n): ")
+            if op.lower() == "y":
+                table.steal(turn)
+                print("Top: ", table.top_card)
+                print("Deck: ", table.player_decks[turn])
         color = input("Color: ")
         number = input("Number: ")
         card = Card(color, number)

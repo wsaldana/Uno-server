@@ -154,3 +154,8 @@ class Table:
             return players[0]
 
         return players[current_index + (1 * self.direction)]
+
+    def steal(self, player: str) -> Card:
+        card = self.deck.pop()
+        self.player_decks[player].append(card)
+        return card
