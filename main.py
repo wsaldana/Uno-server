@@ -5,7 +5,6 @@ def run():
     table = Table()
     j1 = table.generate_player_deck("j1")
     j2 = table.generate_player_deck("j2")
-    j3 = table.generate_player_deck("j3")
 
     print(table.start_game())
 
@@ -13,6 +12,7 @@ def run():
 
     while not win:
         turn = table.turn
+        print("\n", turn)
         print("Top: ", table.top_card)
         print("Deck: ", table.player_decks[turn])
         color = input("Color: ")
