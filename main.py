@@ -1,4 +1,9 @@
 from src.models import Card, Table
+from src.server import Server
+
+
+def listen():
+    view = Server()
 
 
 def run():
@@ -40,4 +45,4 @@ def run():
 
 
 if __name__ == "__main__":
-    run()
+    listen()

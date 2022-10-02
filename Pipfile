@@ -5,6 +5,8 @@ name = "pypi"
 
 [packages]
 uno-server = {editable = true, path = "."}
+python-socketio = "*"
+eventlet = "*"
 
 [dev-packages]
 

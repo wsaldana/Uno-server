@@ -1,20 +1,27 @@
 from typing import List
 from typing import Dict
 import random
+import json
+from json import JSONEncoder
+
 
 from src.exceptions import InvalidCard, InvalidMove
 
 
-class Card:
+class Card(dict):
     def __init__(self, color: str, number: str):
         self.color = color
         self.number = number
+        dict.__init__(self, color=color, number=number)
 
     def __eq__(self, other) -> bool:
         return (self.color == other.color) or (self.number == other.number)
 
     def __str__(self) -> str:
-        return f'({self.color}, {self.number})'
+        return json.dumps({
+            'color': self.color,
+            'number': self.number,
+        })
 
     def __repr__(self) -> str:
         return str(self)
@@ -26,9 +33,10 @@ class Card:
         }
 
 
-class Deck:
-    def __init__(self, cards: List[Card] = []) -> None:
+class Deck(list):
+    def __init__(self, cards: List[Card] = [], *args) -> None:
         self.cards = cards
+        list.__init__(self, *args)
 
     def __len__(self) -> int:
         return len(self.cards)
@@ -62,23 +70,29 @@ class Deck:
     def append(self, card: Card) -> None:
         self.cards.append(card)
 
+    def __contains__(self, __o: Card) -> bool:
+        for card in self.cards:
+            if card.color == __o.color and card.number == __o.number:
+                return True
+        return False
+
 
 baraja = [
-    ('rojo', '3'), ('verde', '7'), ('azul', '9'), ('azul', '7'),
-    ('verde', '1'), ('verde', '4'), ('rojo', '5'), ('rojo', '6'),
-    ('azul', '5'), ('azul', '6'), ('amarillo', '7'), ('azul', '1'),
-    ('rojo', '1'), ('verde', '6'), ('amarillo', '3'), ('amarillo', '0'),
-    ('verde', '2'), ('verde', '3'), ('verde', '9'), ('rojo', '8'),
-    ('azul', '4'), ('azul', '3'), ('amarillo', '1'), ('amarillo', '8'),
-    ('verde', '0'), ('comodin', '+4'), ('verde', '8'), ('amarillo', '9'),
-    ('azul', '8'), ('amarillo', '2'), ('amarillo', '4'), ('rojo', '9'),
-    ('rojo', '4'), ('verde', '5'), ('azul', '2'), ('amarillo', '6'),
-    ('comodin', '+4'), ('rojo', '0'), ('amarillo', '5'), ('azul', '0'),
-    ('rojo', '2'), ('rojo', '7'), ('amarillo', '+2'), ('amarillo', '+2'),
-    ('amarillo', '+2'), ('amarillo', '+2'), ('verde', '+2'), ('comodin', '+4'),
-    ('verde', '+2'), ('verde', '+2'), ('verde', '+2'), ('comodin', '+4'),
-    ('azul', '+2'), ('azul', '+2'), ('azul', '+2'), ('azul', '+2'),
-    ('rojo', '+2'), ('rojo', '+2'), ('rojo', '+2'), ('rojo', '+2')
+    ('red', '3'), ('green', '7'), ('blue', '9'), ('blue', '7'),
+    ('green', '1'), ('green', '4'), ('red', '5'), ('red', '6'),
+    ('blue', '5'), ('blue', '6'), ('yellow', '7'), ('blue', '1'),
+    ('red', '1'), ('green', '6'), ('yellow', '3'), ('yellow', '0'),
+    ('green', '2'), ('green', '3'), ('green', '9'), ('red', '8'),
+    ('blue', '4'), ('blue', '3'), ('yellow', '1'), ('yellow', '8'),
+    ('green', '0'), ('black', '+4'), ('green', '8'), ('yellow', '9'),
+    ('blue', '8'), ('yellow', '2'), ('yellow', '4'), ('red', '9'),
+    ('red', '4'), ('green', '5'), ('blue', '2'), ('yellow', '6'),
+    ('black', '+4'), ('red', '0'), ('yellow', '5'), ('blue', '0'),
+    ('red', '2'), ('red', '7'), ('yellow', '+2'), ('yellow', '+2'),
+    ('yellow', '+2'), ('yellow', '+2'), ('green', '+2'), ('black', '+4'),
+    ('green', '+2'), ('green', '+2'), ('green', '+2'), ('black', '+4'),
+    ('blue', '+2'), ('blue', '+2'), ('blue', '+2'), ('blue', '+2'),
+    ('red', '+2'), ('red', '+2'), ('red', '+2'), ('red', '+2')
 ]
 
 
@@ -110,6 +124,7 @@ class Table:
 
         if self.turn == "":
             self.turn = name
+            self.start_game()
 
         return new_deck
 
@@ -123,14 +138,15 @@ class Table:
         self.turn = player
 
         if card not in self.player_decks[player]:
-            raise InvalidCard()
+            if card.number != "+4":
+                raise InvalidCard()
 
-        if self.top_card != card:
-            if card != Card("comodin", "+4"):
+        if self.top_card.color != card.color and self.top_card.number != card.number:
+            if card.number != "+4":
                 raise InvalidMove()
 
         # Comodines
-        if card == Card("comodin", "+4"):
+        if card == Card("black", "+4"):
             for _ in range(4):
                 self.player_decks[self.next_player()].append(self.deck.pop())
 
