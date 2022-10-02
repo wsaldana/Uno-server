@@ -9,6 +9,7 @@ class Server:
     sio = socketio.Server(cors_allowed_origins='*')
     rooms = {}
     players_conn = {}
+    chat = {}
 
     def __init__(self) -> None:
         app = socketio.WSGIApp(Server.sio)
@@ -114,7 +115,25 @@ class Server:
                 "playerDeck": table.player_decks[msg_json["player"]],
                 "topCard": table.top_card,
                 "turn": table.turn,
+                "chat": self.chat,
                 "query": "BROADCAST",
+            }, room=sid)
+
+        elif msg_json["query"] == "CHAT":
+            table = self.rooms[msg_json["room"]]
+            try:
+                self.chat[msg_json["room"]].append({
+                    'message': msg_json["message"],
+                    'player': msg_json["player"],
+                })
+            except KeyError:
+                self.chat[msg_json["room"]] = [{
+                    'message': msg_json["message"],
+                    'player': msg_json["player"],
+                }]
+            self.sio.emit('message', {
+                "chat": self.chat,
+                "query": "CHAT",
             }, room=sid)
 
         else:
